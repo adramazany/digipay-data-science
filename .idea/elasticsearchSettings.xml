@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ElasticsearchConfiguration">
+    <option name="clusterConfigurations">
+      <map>
+        <entry key="ba52b53a-6d71-4f09-b170-be662c2a22a4">
+          <value>
+            <ClusterConfigInternal>
+              <option name="id" value="ba52b53a-6d71-4f09-b170-be662c2a22a4" />
+              <option name="label" value="172.18.24.85-elasticsearch" />
+              <option name="url" value="http://172.18.24.85:9200" />
+              <option name="credentialsStored" value="false" />
+            </ClusterConfigInternal>
+          </value>
+        </entry>
+        <entry key="fc35720a-5517-418c-9a02-a7ba72a21423">
+          <value>
+            <ClusterConfigInternal>
+              <option name="id" value="fc35720a-5517-418c-9a02-a7ba72a21423" />
+              <option name="label" value="@localhost" />
+              <option name="url" value="http://localhost:9200" />
+              <option name="credentialsStored" value="true" />
+            </ClusterConfigInternal>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

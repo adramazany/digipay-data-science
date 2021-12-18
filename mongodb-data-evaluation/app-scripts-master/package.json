@@ -1,0 +1,19 @@
+{
+	"name": "campaign-management",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {},
+	"repository": {
+		"type": "git",
+		"url": "http://repo.mydigipay.info/main/campaign-management.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"ioredis": "^4.17.3",
+		"jalali-moment": "^3.3.8",
+		"mongodb": "^3.6.3"
+	}
+}

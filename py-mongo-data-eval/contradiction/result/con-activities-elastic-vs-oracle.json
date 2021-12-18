@@ -1,0 +1,17 @@
+ERROR:root:contradiction detected at :1398/09/04 => SRC count=122687 , amount=475465252361 , feeCharge=27623250 <> DEST count=122688 , amount=475468072361 , feeCharge=27628250
+ERROR:root:contradiction detected at :1399/01/06 => SRC count=147161 , amount=714712872477 , feeCharge=90044000 <> DEST count=147164 , amount=714717965177 , feeCharge=90044000
+ERROR:root:contradiction detected at :1399/01/07 => SRC count=198565 , amount=1062551475971 , feeCharge=109055000 <> DEST count=198562 , amount=1062546383271 , feeCharge=109055000
+ERROR:root:contradiction detected at :1399/02/14 => SRC count=209388 , amount=832118490562 , feeCharge=138193000 <> DEST count=209391 , amount=832148797562 , feeCharge=138193000
+ERROR:root:contradiction detected at :1399/02/15 => SRC count=207390 , amount=770756364572 , feeCharge=147804000 <> DEST count=207388 , amount=770726781572 , feeCharge=147804000
+ERROR:root:contradiction detected at :1399/06/09 => SRC count=136830 , amount=582350569029 , feeCharge=119334000 <> DEST count=136831 , amount=582350571029 , feeCharge=119334000
+ERROR:root:contradiction detected at :1399/06/10 => SRC count=180296 , amount=1144019357225 , feeCharge=553324000 <> DEST count=180295 , amount=1144019355225 , feeCharge=553324000
+ERROR:root:contradiction detected at :1399/07/14 => SRC count=192468 , amount=1678449841167 , feeCharge=660665000 <> DEST count=192469 , amount=1678525631167 , feeCharge=660665000
+ERROR:root:contradiction detected at :1399/08/02 => SRC count=173194 , amount=1085564813151 , feeCharge=1317250000 <> DEST count=173193 , amount=1085489023151 , feeCharge=1317250000
+ERROR:root:contradiction detected at :1399/09/03 => SRC count=294138 , amount=1809697034362 , feeCharge=1723159000 <> DEST count=294135 , amount=1809598301862 , feeCharge=1723117000
+ERROR:root:contradiction detected at :1399/09/06 => SRC count=249193 , amount=1146940940569 , feeCharge=847135200 <> DEST count=249192 , amount=1146940150569 , feeCharge=847130200
+ERROR:root:contradiction detected at :1399/09/07 => SRC count=485350 , amount=4290437260926 , feeCharge=1622906400 <> DEST count=485349 , amount=4290436920926 , feeCharge=1622901400
+ERROR:root:contradiction detected at :1399/09/09 => SRC count=398648 , amount=2285084763923 , feeCharge=991530800 <> DEST count=398642 , amount=2285069219923 , feeCharge=991500800
+ERROR:root:contradiction detected at :1399/09/10 => SRC count=242949 , amount=1361263072692 , feeCharge=859720400 <> DEST count=242950 , amount=1361263147692 , feeCharge=859725400
+ERROR:root:contradiction detected at :1399/09/11 => SRC count=216163 , amount=1461521779794 , feeCharge=769112200 <> DEST count=216162 , amount=1461520034794 , feeCharge=769107200
+ERROR:root:contradiction detected at :1399/09/12 => SRC count=221037 , amount=1401174760197 , feeCharge=473333000 <> DEST count=221034 , amount=1401174605697 , feeCharge=473318000
+ERROR:root:contradiction detected at :1399/09/13 => SRC count=207950 , amount=1170119286932 , feeCharge=401355200 <> DEST count=207948 , amount=1170104896932 , feeCharge=401345200

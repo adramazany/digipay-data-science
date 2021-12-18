@@ -1,0 +1,3 @@
+# Project exclude paths
+/data-utilities/target/
+/mongodb-data-evaluation/app-scripts-master/node_modules/

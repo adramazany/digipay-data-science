@@ -1,0 +1,6 @@
+ERROR:root:contradiction detected at :13990917 => SRC count=226433 , amount=1712776502021 , feeCharge=1434753600 <> DEST count=226434 , amount=1712856456021 , feeCharge=1434778600
+ERROR:root:contradiction detected at :13990920 => SRC count=216971 , amount=1406220369238 , feeCharge=1239816600 <> DEST count=216972 , amount=1406221989238 , feeCharge=1239821600
+ERROR:root:contradiction detected at :13990924 => SRC count=235011 , amount=1365248832772 , feeCharge=1467394000 <> DEST count=235012 , amount=1365250162772 , feeCharge=1467399000
+ERROR:root:contradiction detected at :13990926 => SRC count=217334 , amount=1155424110559 , feeCharge=704241200 <> DEST count=217379 , amount=1155563862959 , feeCharge=704479200
+ERROR:root:contradiction detected at :13990927 => SRC count=211034 , amount=1124129991749 , feeCharge=488376400 <> DEST count=211035 , amount=1124133397149 , feeCharge=488381400
+ERROR:root:contradiction detected at :13990930 => SRC count=379438 , amount=3069453662697 , feeCharge=3258779200 <> DEST count=379439 , amount=3069543162697 , feeCharge=3258806200

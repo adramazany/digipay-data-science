@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/data-utilities/data-utilities.iml" filepath="$PROJECT_DIR$/data-utilities/data-utilities.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ml-py/ml-py.iml" filepath="$PROJECT_DIR$/ml-py/ml-py.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mongodb-data-evaluation/mongodb-data-evaluation.iml" filepath="$PROJECT_DIR$/mongodb-data-evaluation/mongodb-data-evaluation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/py-face.iml" filepath="$PROJECT_DIR$/py-face.iml" />
+      <module fileurl="file://$PROJECT_DIR$/py-mongo-data-eval/py-mongo-data-eval.iml" filepath="$PROJECT_DIR$/py-mongo-data-eval/py-mongo-data-eval.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tutorial_pkg/tutorial_pkg.iml" filepath="$PROJECT_DIR$/tutorial_pkg/tutorial_pkg.iml" />
+    </modules>
+  </component>
+</project>

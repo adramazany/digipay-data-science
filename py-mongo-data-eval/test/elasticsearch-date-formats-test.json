@@ -1,0 +1,24 @@
+PUT elastic-date-formats
+{
+  "mappings": {
+    "properties": {
+      "date": {
+        "type": "date"
+      }
+    }
+  }
+}
+
+PUT elastic-date-formats/_doc/1
+{ "date": "2015-01-01" }
+
+PUT elastic-date-formats/_doc/2
+{ "date": "2015-01-01T12:10:30Z" }
+
+PUT elastic-date-formats/_doc/3
+{ "date": 1420070400001 }
+
+GET elastic-date-formats/_search
+{
+  "sort": { "date": "asc"}
+}

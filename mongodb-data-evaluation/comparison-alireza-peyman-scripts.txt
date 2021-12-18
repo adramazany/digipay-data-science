@@ -1,0 +1,50 @@
+##########################  appActivityTypes = App Customer
+peyman :                            'status': 0    , 'type': {'$in': [12, 15, 16, 17, 30, 31, 32, 40        , 70, 80, 92     , 110, 111, 112, 113, 140, 170];
+alireza: distinct SourceCellNumber + Status=0 and TransactionType in (12, 15, 16, 17, 30, 31, 32, 40, 50, 60, 70, 80, 92, 100, 110, 111, 112, 113)
+
+##########################   = Credit Customer
+peyman :
+alireza: distinct SourceCellNumber + TransactionType=5
+
+##########################   = IPG Customer
+peyman : "gateway": {$in: [0,1]}, + "ownerSide": {$in: [0,3]} + "type": {$in: [0, 1, 16, 30, 31, 40, 70, 80, 92, 100, 110, 111, 112, 113, 130, 140, 150, 160, 170]  + ...
+alireza: distinct SourceCellNumber + status=0 and gateway in (0,1)
+
+##########################   = Wallet Customer
+peyman : "status": 0 or {$or: [{"gateway": 4, "type": {$in: [0, 1, 30, 31, 32, 40, 70, 80, 92, 100, 110, 111, 112, 113, 130, 140, 150, 160, 170]}},{"type": {$in: [15, 16, 17]}}]}
+alireza: distinct SourceCellNumber + status=0 and gateway=4
+
+##########################   = IPG New Customer
+peyman :
+alireza: distinct SourceCellNumber + status=0 and gateway in (0,1) and SourceCellNumber not in ( <@StartDate+...)
+
+##########################   = Credit New Customer
+peyman :
+alireza: distinct SourceCellNumber + status=0 and TransactionType=5 and SourceCellNumber not in ( <@StartDate+...)
+
+##########################   = Wallet New Customer
+peyman :
+alireza: distinct SourceCellNumber + status=0 and gateway=4 and SourceCellNumber not in ( <@StartDate+...)
+
+##########################   = App New Customer
+peyman :
+alireza: distinct SourceCellNumber + TransactionType in (12,15,16,17,30,31,32,40,50,60,70,80,92,100,110,111,112,113) and status=0 and a.SourceCellNumber not in (<@StartDate+...)
+
+##########################   = IPG New User
+peyman :
+alireza: distinct SourceCellNumber + Gateway in (0,1) and SourceCellNumber not in ( <@StartDate+...)
+
+######################################################
+##########################   users   #################
+######################################################
+
+##########################   = Wallet New Active User
+peyman :
+alireza: status=0
+
+##########################   = App New User
+peyman :
+alireza: status=0
+
+
+
