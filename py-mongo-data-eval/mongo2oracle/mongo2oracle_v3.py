@@ -2,7 +2,6 @@
 # The mongo2oracle etl tools module was contributed to Python as of Python 3.8 and thus
 # was licensed under the Python license. Same license applies to all files in
 # the mongo2oracle package project.
-import logging
 import re
 import time
 import datetime
@@ -22,9 +21,6 @@ MIN_SIZE_NUMBER=12
 insert_query=""
 update_query=""
 subtable_insert_query=""
-##################################################################################
-logging.basicConfig(level=logging.INFO ,format='%(asctime)s - %(process)d - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
 ##################################################################################
 def str_abbreviation_first_word_1(st,limit,sep='_',start_pos=0):
     if len(st)>limit:
@@ -49,9 +45,9 @@ def clean_column_name(col):
     if myisnumeric(col):
         col='N_%s'%(col)
     #remove non english chars
-    col_en = col.encode("ascii", "ignore").decode().replace(" ","_").replace("\\","_") \
-        .replace(".","_").replace(")","_").replace("(","_") \
-        .replace("_id","id").replace("_class","class")
+    col_en = col.encode("ascii", "ignore").decode().replace(" ","_").replace("\\","_")\
+                .replace(".","_").replace(")","_").replace("(","_")\
+                .replace("_id","id").replace("_class","class")
     if len(str(col_en))==0:
         col='U_%s'%(len(col))
     else:
@@ -108,7 +104,7 @@ def clean_column_name_length_isnumeric(df):
 
         for col in df.columns :
             val={'original':col
-                ,'length':(df_columns_length[col] if df_columns_length[col]<=4000 else 4000)
+                 ,'length':(df_columns_length[col] if df_columns_length[col]<=4000 else 4000)
                 ,'isnumeric':(col in df_columns_numeric_medians and 'median' in df_columns_numeric_medians[col] and  df_columns_numeric_medians[col]['median'] is not np.NAN)
                 ,'isfloat':  (col in df_columns_numeric_medians and 'median' in df_columns_numeric_medians[col] and df_columns_numeric_medians[col]['median'] is not np.NAN
                               and 'max' in df_columns_numeric_medians[col] and myisnumeric(df_columns_numeric_medians[col]['max']) and (float(df_columns_numeric_medians[col]['max'])%1>0) )
@@ -286,10 +282,8 @@ def create_subtables(df,subtables,oracle_cursor,dest_column_type='varchar2(1000)
 
 ##################################################################################
 def trun_byte(src, byte_limit, encoding='utf-8'):
-    if not isinstance(src,str):
+    if myisnumeric(src):
         src=str(src)
-    # if myisnumeric(src):
-    #     src=str(src)
     if getsizeof(src)<byte_limit:
         return src
     else:
@@ -324,14 +318,14 @@ def insert_subtables(oracle_cursor,subtables):
 ##################################################################################
 
 def etl_append(mongoDB,mongo_collection,mongo_query,oracleDB
-               ,dest_table_name
+              ,dest_table_name
                ,mongo_limit=0
                ,mongo_sort='creationdate'
-               ,dest_column_type='varchar2(1000)'
-               ,fn_clean_data=None
-               ,timestamp2jalali=None
-               ,timestamp2gregorian=None
-               ,subtables=None):
+              ,dest_column_type='varchar2(1000)'
+              ,fn_clean_data=None
+              ,timestamp2jalali=None
+              ,timestamp2gregorian=None
+              ,subtables=None):
     t1= time.time()
     print("etl_append: mongo_query=db.%s.find(%s).sort([{%s: 1}]).limit(%s); dest_table_name=%s start at : %s"%(mongo_collection,mongo_query,mongo_sort,mongo_limit,dest_table_name,t1))
 
@@ -376,7 +370,7 @@ def etl_append(mongoDB,mongo_collection,mongo_query,oracleDB
         counter=0
         subtable_counter=0
         for row in df_without_subtables.values.tolist():
-            # for i,row in df_without_subtables.iterrows():
+        # for i,row in df_without_subtables.iterrows():
             insert_query = "insert into "+dest_table_name+"(" \
                            +(", ").join(clean_columns) \
                            +") values ('" \
@@ -403,15 +397,15 @@ def etl_append(mongoDB,mongo_collection,mongo_query,oracleDB
 
 ##################################################################################
 def _etl_update_between_lastmodified_lastcreated(mongoDB,mongo_collection
-                                                 ,oracleDB,dest_table_name,dest_column_type='varchar2(1000)'
-                                                 ,dest_column_4max='CREATIONDATE'
-                                                 ,mongo_ordered_column='creationdate'
-                                                 ,mongo_modification_column=None
-                                                 ,chunk_size=1000
-                                                 ,fn_clean_data=None,fn_cnv_max_value=None
-                                                 ,timestamp2jalali=None
-                                                 ,timestamp2gregorian=None
-                                                 ,subtables=None):
+         ,oracleDB,dest_table_name,dest_column_type='varchar2(1000)'
+         ,dest_column_4max='CREATIONDATE'
+         ,mongo_ordered_column='creationdate'
+         ,mongo_modification_column=None
+         ,chunk_size=1000
+         ,fn_clean_data=None,fn_cnv_max_value=None
+         ,timestamp2jalali=None
+         ,timestamp2gregorian=None
+         ,subtables=None):
     if not mongo_modification_column:
         return
 
@@ -440,14 +434,14 @@ def _etl_update_between_lastmodified_lastcreated(mongoDB,mongo_collection
 
 ##################################################################################
 def _etl_incremental(mongoDB,mongo_collection
-                     ,oracleDB,dest_table_name,dest_column_type='varchar2(1000)'
-                     ,dest_column_4max='CREATIONDATE'
-                     ,mongo_ordered_column='creationdate'
-                     ,chunk_size=1000
-                     ,fn_clean_data=None,fn_cnv_max_value=None
-                     ,timestamp2jalali=None
-                     ,timestamp2gregorian=None
-                     ,subtables=None):
+            ,oracleDB,dest_table_name,dest_column_type='varchar2(1000)'
+            ,dest_column_4max='CREATIONDATE'
+            ,mongo_ordered_column='creationdate'
+            ,chunk_size=1000
+            ,fn_clean_data=None,fn_cnv_max_value=None
+            ,timestamp2jalali=None
+            ,timestamp2gregorian=None
+            ,subtables=None):
 
     cursor=oracleDB.cursor()
     counter=1
@@ -473,8 +467,8 @@ def _etl_incremental(mongoDB,mongo_collection
 
 ##################################################################################
 def etl_from_to_jalali_date(mongoDB,mongo_collection,jalali_from,jalali_to
-                            ,oracleDB,dest_table_name,dest_column_type='varchar2(1000)'
-                            ,fn_clean_data=None):
+            ,oracleDB,dest_table_name,dest_column_type='varchar2(1000)'
+               ,fn_clean_data=None):
 
     # mongo_query={mongo_ordered_column:{"$gte":max_value}}
 
@@ -483,9 +477,9 @@ def etl_from_to_jalali_date(mongoDB,mongo_collection,jalali_from,jalali_to
 
 ##################################################################################
 def etl_incremental(mongo_uri,mongo_db,mongo_collection
-                    ,oracle_dsn,oracle_user,oracle_pass
+                     ,oracle_dsn,oracle_user,oracle_pass
                     ,dest_table_name,dest_column_type='varchar2(1000)'
-                    ,dest_column_4max='CREATIONDATE'
+                     ,dest_column_4max='CREATIONDATE'
                     ,mongo_ordered_column='creationdate'
                     ,mongo_modification_column=None
                     ,chunk_size=1000
@@ -583,8 +577,8 @@ def etl(mongo_uri,mongo_db,mongo_collection,mongo_query,oracle_dsn,oracle_user,o
         # insert_query = "insert into {0} ({1}) values (?{2})".format(TABLE_NAME, ",".join(data.columns).replace(".","_").replace("_id","id").replace("_class","class"), ",?" * (len(data.columns)-1))
         bind_names = ",".join(":" + str(i + 1) \
                               for i in range(len(clean_columns)))
-        insert_query = "insert into "+dest_table_name+"(" \
-                       +(", ").join(clean_columns) \
+        insert_query = "insert into "+dest_table_name+"("\
+                        +(", ").join(clean_columns)\
                        +") values (" + bind_names + ")"
         # print(insert_query)
 
@@ -743,8 +737,8 @@ def delete_subtables(oracle_cursor,subtables):
             if len(subtable_df)>0:
                 delete_column_values = subtable_df[subtable["delete_column"]].unique()
                 if len(delete_column_values)>0:
-                    subtable_delete_query = "delete "+subtable["tablename"]+" where " \
-                                            +subtable["delete_column"]+" in ('" \
+                    subtable_delete_query = "delete "+subtable["tablename"]+" where "\
+                                            +subtable["delete_column"]+" in ('"\
                                             +("','").join(delete_column_values) \
                                             +"')"
                     # subtable_insert_query=subtable_insert_query.replace("'nan'","null")
