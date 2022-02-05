@@ -84,7 +84,8 @@ rfm.show(5)
 # and get feedback and suggestion from them. I will use the quantile as the cutting points in this demo.
 
 cols = ['Recency','Frequency','Monetary']
-describe_pd(rfm,cols,1)
+
+# describe_pd(rfm,cols,1)
 
 # The user defined function by using the cutting points:
 
