@@ -1,0 +1,59 @@
+### refresh token
+# curl 'https://accounts.pod.ir/oauth2/token?grant_type=refresh_token&client_id=9326820e9ba14d9b822f51010028cf00&refresh_token=2ba09737435f4a0eb0cbfce380d90573&code_verifier=1KbYzrQBANWOk2tQIezpWHzEPty0vir1Z_DrmYjYVr0' -X POST -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0' -H 'Accept: */*' -H 'Accept-Language: en-US,en;q=0.5' -H 'Accept-Encoding: gzip, deflate, br' -H 'Referer: https://dashboard.pod.ir/' -H 'content-type: application/x-www-form-urlencoded' -H 'Origin: https://dashboard.pod.ir' -H 'Connection: keep-alive' -H 'Sec-Fetch-Dest: empty' -H 'Sec-Fetch-Mode: cors' -H 'Sec-Fetch-Site: same-site' -H 'Content-Length: 0' -H 'TE: trailers'
+POST https://accounts.pod.ir/oauth2/token?grant_type=refresh_token&client_id=9326820e9ba14d9b822f51010028cf00&refresh_token=2ba09737435f4a0eb0cbfce380d90573&code_verifier=1KbYzrQBANWOk2tQIezpWHzEPty0vir1Z_DrmYjYVr0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Referer: https://dashboard.pod.ir/
+Origin: https://dashboard.pod.ir
+Connection: keep-alive
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: same-site
+Content-Length: 0
+TE: trailers
+Content-Type: application/x-www-form-urlencoded
+
+> {% client.log(response.body.json.access_token); %}
+
+### get report options
+# curl 'https://dashboardservice.pod.ir/v1/userreport/1414/getCSV?forceSave=false' -X OPTIONS -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0' -H 'Accept: */*' -H 'Accept-Language: en-US,en;q=0.5' -H 'Accept-Encoding: gzip, deflate, br' -H 'Access-Control-Request-Method: POST' -H 'Access-Control-Request-Headers: content-type,token' -H 'Referer: https://dashboard.pod.ir/' -H 'Origin: https://dashboard.pod.ir' -H 'Connection: keep-alive' -H 'Sec-Fetch-Dest: empty' -H 'Sec-Fetch-Mode: cors' -H 'Sec-Fetch-Site: same-site' -H 'TE: trailers'
+OPTIONS https://dashboardservice.pod.ir/v1/userreport/1414/getCSV?forceSave=false
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Access-Control-Request-Method: POST
+Access-Control-Request-Headers: content-type,token
+Referer: https://dashboard.pod.ir/
+Origin: https://dashboard.pod.ir
+Connection: keep-alive
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: same-site
+TE: trailers
+
+#> {% client.global.set("pod_auth_token", response.headers.token); %}
+
+### get report data
+# curl 'https://dashboardservice.pod.ir/v1/userreport/1414/getCSV?forceSave=false' -X POST -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0' -H 'Accept: application/json, text/plain, */*' -H 'Accept-Language: en-US,en;q=0.5' -H 'Accept-Encoding: gzip, deflate, br' -H 'Content-Type: application/json;charset=utf-8' -H 'token: 2a6e4e54e1934a46a862b6f477e16695' -H 'Origin: https://dashboard.pod.ir' -H 'Connection: keep-alive' -H 'Referer: https://dashboard.pod.ir/' -H 'Sec-Fetch-Dest: empty' -H 'Sec-Fetch-Mode: cors' -H 'Sec-Fetch-Site: same-site' -H 'TE: trailers' --data-raw '{"filterVOS":[],"parentParams":[{"fill":"BY_BUSINESS_OR_PARENT","id":785,"key":"START_DATE","order":0,"type":"DATE_FROM","validValueType":"NONE","value":"30"},{"fill":"BY_BUSINESS_OR_PARENT","id":786,"key":"END_DATE","order":1,"type":"DATE_FROM","validValueType":"NONE","value":"0"}],"orderByElementVOS":[]}'
+POST https://dashboardservice.pod.ir/v1/userreport/1414/getCSV?forceSave=false
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0
+Accept: application/json, text/plain, */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+token: 2a6e4e54e1934a46a862b6f477e16695
+#token: {{auth_token}}
+Origin: https://dashboard.pod.ir
+Connection: keep-alive
+Referer: https://dashboard.pod.ir/
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: same-site
+TE: trailers
+Content-Type: application/json;charset=utf-8
+
+{"filterVOS":[],"parentParams":[{"fill":"BY_BUSINESS_OR_PARENT","id":785,"key":"START_DATE","order":0,"type":"DATE_FROM","validValueType":"NONE","value":"30"},{"fill":"BY_BUSINESS_OR_PARENT","id":786,"key":"END_DATE","order":1,"type":"DATE_FROM","validValueType":"NONE","value":"0"}],"orderByElementVOS":[]}
+
+###
