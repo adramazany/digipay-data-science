@@ -1,0 +1,44 @@
+
+### session
+GET http://rahkaran.mydigipay.info/sg/Services/Framework/AuthenticationService.svc/session
+Host: rahkaran.mydigipay.info
+
+#HTTP/1.1 200 OK
+#Cache-Control: must-revalidate, max-age=0, s-maxage=0
+#Pragma: no-cache
+#Content-Type: application/json; charset=utf-8
+#Expires: 0
+#X-Frame-Options: SAMEORIGIN
+#Content-Security-Policy: frame-ancestors 'self'
+#X-XSS-Protection: 1; mode=block
+#Date: Mon, 14 Mar 2022 14:00:44 GMT
+#Content-Length: 325
+#
+#{
+#  "id": "9c7914f972d3418fae32697511748f5a",
+#  "rsa": {
+#    "M": "D5421B1A8A21BB740794481A6AC29D286A35CEB71B5CBC1A74588350B295AF991C9CEF1C848BA3F0D60E6C3115DE37474018DB6C3BD4211D08A33D9A58A9DB91F50D555235A0324FEF2617F0F443F1B89C41F2D9EB8115E4ECC4DD1753741A9B83595EA006D2C1D5F09711FE789524284A72EE3C1FC9E3379C458F0A5B2A8441",
+#    "E": "010001"
+#  }
+#}
+
+### login
+POST /sg3g/x4944f594/Services/Framework/AuthenticationService.svc/login HTTP/1.1
+Host: rahkaran.mydigipay.info
+Content-Type: application/json
+
+{
+  "sessionId":"e879b6dda4a841c0bb73a1655cb24d38",
+  "username":"DIGIPAY",
+  "password":"c246a7f249e0a72cba48e6a94a763569b8e512f92d0b8e2395412bec52f956161f2beb07eb5828ec33d38488d27d413d112cfc749b6adbabcc7584e8804a58fd493168f8c4f6e2c7b4a32604ba6f154ddaa79f15307d46403c0ad3c7dc45c2d455c51638f6904304902671e9ff272a68c1e402ee45f7a235b57f91d336f4b4b5"
+}
+
+# #domain    path    name    value    date
+#rahkaran.mydigipay.info    /    sg-auth-sg    629858aa-e3b4-49e2-b08d-40e6ad795b01    -1
+#rahkaran.mydigipay.info    /    sg-dummy    -    -1
+
+### view_voucher
+GET /sg/Services/Financial/VoucherManagementService.svc/ViewVoucher?id=6414 HTTP/1.1
+Host: rahkaran.mydigipay.info
+Content-Type: application/json
+Cookie: sg-auth-sg=bf1b36e8-ff25-49bc-a976-570f5cd02bd5; sg-dummy=-
