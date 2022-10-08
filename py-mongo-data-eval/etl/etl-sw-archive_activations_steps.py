@@ -11,6 +11,9 @@ MONGO_COLLECTION="archive_activations"
 ORACLE_USER = "mongodb" #"stage"#
 ORACLE_PASS = "Mongo123" #"stage"#
 ORACLE_DSN = "172.18.24.84/orcl"
+# ORACLE_USER = "mongodb" #"stage"#
+# ORACLE_PASS = "OraMon123" #"stage"#
+# ORACLE_DSN = "10.198.31.51/dgporclw"
 DEST_TABLE_NAME= 'sw_credit_archive_acts'
 # COLUMN_TYPE="varchar2(2000)"
 

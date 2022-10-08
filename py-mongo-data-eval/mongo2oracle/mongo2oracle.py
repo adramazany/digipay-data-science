@@ -44,7 +44,7 @@ def str_abbreviation_first_word(st,limit,sep='_',start_pos=0):
             return st[:limit]
     return st
 ##################################################################################
-def clean_column_name(col):
+def clean_column_name(col,cleans_columns):
     #column name is number
     if myisnumeric(col):
         col='N_%s'%(col)
@@ -63,12 +63,16 @@ def clean_column_name(col):
     if len(col)>31:
         col = str_abbreviation_first_word(col,31)
     # return col.upper()
-    return col.upper().replace("OPTION","OPTION_")
+    clean_name = col.upper().replace("OPTION","OPTION_")
+
+    clean_name = check_clean_name_exist_iter_name(clean_name,cleans_columns)
+
+    return clean_name
 ##################################################################################
 def clean_column_names(columns):
     cleans_columns=list()
     for col in columns :
-        cleans_columns.append(clean_column_name(col))
+        cleans_columns.append(clean_column_name(col,columns))
     return cleans_columns
 
 ##################################################################################
@@ -88,6 +92,19 @@ def myisnumeric(obj):
     else:
         return False
 ##################################################################################
+def check_clean_name_exist_iter_name(clean_name, cleans_columns):
+    if clean_name in cleans_columns and clean_name[29:]:
+        print(">>>> clean_name is already exists!!! : {}".format(clean_name))
+        counter=0
+        for x in cleans_columns:
+            if x[:29]==clean_name[:29] and x[29:] and x[29:].isnumeric():
+                counter=max(counter,int(x[29:]))
+        counter += 1
+        max_clean_name="%s%02d"%(clean_name[:29],counter)
+        return max_clean_name
+    else:
+        return clean_name
+
 def clean_column_name_length_isnumeric(df):
     cleans_columns=dict()
 
@@ -114,7 +131,7 @@ def clean_column_name_length_isnumeric(df):
                               and 'max' in df_columns_numeric_medians[col] and myisnumeric(df_columns_numeric_medians[col]['max']) and (float(df_columns_numeric_medians[col]['max'])%1>0) )
                  }
             # clean_name = col.replace(".","_").replace("_id","id").replace("_class","class")[:31].upper()
-            clean_name = clean_column_name(col)
+            clean_name = clean_column_name(col,cleans_columns)
             # col = col[:31]
             cleans_columns[clean_name]=val
 
@@ -126,14 +143,14 @@ def new_column_sql_definition(col,clean_columns):
     col_val =  clean_columns[col]
     col_type=' varchar2('+str(max(col_val['length'],MIN_SIZE_VARCHAR))+' CHAR)'
     if col.startswith('JD_'):
-        col_type=' numeric(10)'
+        col_type=' numeric('+str(max(col_val['length'],MIN_SIZE_NUMBER))+')'
     elif col.startswith('GD_'):
         col_type=' timestamp'
     elif col_val['isnumeric']:
         # col_type=' numeric('+str(max(col_val['length'],MIN_SIZE_NUMBER))
         # if col_val['isfloat']:
         #     col_type+=",3"
-        col_type=' varchar2('+str(max(col_val['length'],MIN_SIZE_NUMBER))
+        col_type=' varchar2('+str(max(col_val['length'],MIN_SIZE_NUMBER))+" CHAR"
         col_type+=')'
     return col+col_type
 ##################################################################################
@@ -250,6 +267,7 @@ def create_subtables(df,subtables,oracle_cursor,dest_column_type='varchar2(1000)
                     # items = yaml.load(row,yaml.FullLoader)
                     if subtable_str and str(subtable_str)!='nan':
                         try:
+                            subtable_str = replace_datetime(subtable_str)
                             items = yaml.load(subtable_str,yaml.loader.UnsafeLoader)
                             for item in items:
                                 for fk in subtable["foreignkeys"]:
@@ -258,7 +276,8 @@ def create_subtables(df,subtables,oracle_cursor,dest_column_type='varchar2(1000)
                             subtable_all_objects = subtable_all_objects+items
                         except Exception as err:
                             log_etl_failed(oracle_cursor,subtable["tablename"],df[subtable["master_pk"]][i],err)
-            subtable_df = pandas.DataFrame(subtable_all_objects)
+            # subtable_df = pandas.DataFrame(subtable_all_objects)
+            subtable_df = pandas.json_normalize(subtable_all_objects)
 
             ## create sub_subtables
             if "subtables" in subtable:
@@ -294,6 +313,22 @@ def trun_byte(src, byte_limit, encoding='utf-8'):
         return src
     else:
         return src.encode(encoding)[:byte_limit].decode(encoding, 'ignore')
+##################################################################################
+def replace_datetime(text:str,date_format='%Y/%m/%d %H:%M:%S'
+                     ,invalid_date_pattern ="[datetime\.]*datetime\(\d{2,4}\s*,\s*\d{1,2}[: None]*,\s*\d{1,2}[: None]*,\s*\d{1,2}[: None]*,\s*\d{1,2}[: None]*,\s*\d{1,2}[: None]*,\s*\d{1,6}\)\s*[: None]*"
+                     ,fast_search="datetime("
+                     ,replace_with_empty=": None"):
+    if fast_search and fast_search not in text:
+        return text
+    founded_datetimes = re.findall(invalid_date_pattern,st)
+    if founded_datetimes:
+        converted_datetimes = list(map(lambda x:eval(x.replace(replace_with_empty,'')).strftime(date_format),founded_datetimes))
+        splited_others = re.split(invalid_date_pattern,st)
+        result=splited_others[0]
+        for i in range(1,len(splited_others)):
+            result+="'"+converted_datetimes[i-1]+"' "+splited_others[i]
+        text=result
+    return text
 ##################################################################################
 def insert_subtables(oracle_cursor,subtables):
     subtables_counter=0
@@ -360,14 +395,14 @@ def etl_append(mongoDB,mongo_collection,mongo_query,oracleDB
         fn_clean_data(df)
         # print("data cleaned.")
 
+    df_without_subtables = df
     if subtables:
         create_subtables(df,subtables,oracle_cursor,dest_column_type)
         subtables_name=get_subtables_name(subtables)
         df_without_subtables = df[df.columns.difference(subtables_name)]
 
-    # clean_columns = clean_column_names(df.columns)
     clean_columns = clean_column_name_length_isnumeric(df_without_subtables)
-    # columns_length = get_columns_type_length(df)
+
 
     create_table_if_not_exists(oracle_cursor,dest_table_name,clean_columns,dest_column_type)
     fix_table_diff(oracle_cursor,dest_table_name,clean_columns,dest_column_type)

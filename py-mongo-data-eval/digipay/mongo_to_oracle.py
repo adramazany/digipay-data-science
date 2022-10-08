@@ -206,7 +206,8 @@ def create_subtables(df,subtables,oracle_cursor,dest_column_type='varchar2(1000)
                         subtable_all_objects = subtable_all_objects+items
                     except Exception as err:
                         log_etl_failed(oracle_cursor,subtable["tablename"],df[subtable["master_pk"]][i],err)
-            subtable_df = pandas.DataFrame(subtable_all_objects)
+            # subtable_df = pandas.DataFrame(subtable_all_objects)
+            subtable_df = pandas.json_normalize(subtable_all_objects)
 
             ## create sub_subtables
             if "subtables" in subtable:
