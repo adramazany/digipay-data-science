@@ -4,28 +4,35 @@
 """
 __author__ = "Adel Ramezani <adramazany@gmail.com>"
 
+import datetime
+import json
 import logging
 import sys
 
+import flask.json
+import numpy as np
 import pandas as pd
-from flask import Flask, request
+from flask import Flask
+from flask import request,jsonify
 from flask_cors import CORS
 from flask_restful import Api, Resource
 from sqlalchemy import create_engine
+
 
 app = Flask(__name__)
 api = Api(app)
 CORS(app)
 db_url = 'oracle+cx_oracle://payment_api:payment_api@10.198.31.51:1521/?service_name=dgporclw'
 
-
+############# logging initiate ##################
 _format = '%(asctime)s - %(process)d - %(name)s - %(levelname)s - %(message)s'
 _formater = logging.Formatter(_format)
-_level=logging.DEBUG
-# _level=logging.INFO
+# _level=logging.DEBUG
+_level=logging.INFO
 logging.basicConfig(level=_level ,format=_format)
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(sys.stdout))
+######################
 
 class MerchantStatService:
     # transaction_sql1 = "select status,sum(amt) amt,sum(cnt) cnt from mongodb.FT_PAYMENT_TRANS_DAILY p " \
@@ -64,7 +71,7 @@ class MerchantStatService:
     def _get_compare_params(self,params):
         if not all(i in params for i in ["compare_from","compare_to"]):
             return None
-        compare_params=params
+        compare_params=params.to_dict()
         compare_params["date_from"]=params["compare_from"]
         compare_params["date_to"]=params["compare_to"]
         return self._get_params(compare_params)
@@ -167,6 +174,9 @@ class MerchantStatService:
         return result
 
 class MerchantStatApi(Resource):
+    def np_encoder(self,object):
+        if isinstance(object, np.generic):
+            return object.item()
 
     def _get_request_params(self):
         params=request.args
@@ -181,10 +191,24 @@ class MerchantStatApi(Resource):
         result["refund"] = _service.get_refund_stat(_request_params)
         result["gateway"] = _service.get_gateway_stat(_request_params)
 
-        return result
+        logger.info( result)
 
+        return jsonify(result)
 
-
+################# PROBLEM SOLVING ##########
+# to resolve : {TypeError}Object of type int64 is not JSON serializable
+class FlaskJSONEncoder(flask.json.JSONEncoder):
+    def default(self,obj):
+        if isinstance(obj,(np.integer,np.floating,np.bool_)):
+            return obj.item()
+        elif isinstance(obj,np.ndarray):
+            return obj.tolist()
+        elif isinstance(obj,(datetime.datetime,datetime.timedelta)):
+            return obj.__str__()
+        else:
+            return super(FlaskJSONEncoder,self).default(obj)
+app.json_encoder = FlaskJSONEncoder # to resolve : {TypeError}Object of type int64 is not JSON serializable
+##########
 
 api.add_resource(MerchantStatApi,'/merchant')
 @app.route('/')
