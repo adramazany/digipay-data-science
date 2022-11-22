@@ -39,23 +39,23 @@ class MerchantStatService:
     #                   " where BUSINESS_ID=%(business_id)s and p.P_DATE between %(date_from)s and %(date_to)s" \
     #                   " and TRANS_TYPE in (10,11) group by status"
     transaction_sql = "select status,sum(amt) amt,sum(cnt) cnt from mongodb.FT_PAYMENT_TRANS_DAILY p " \
-                      " where BUSINESS_ID=:business_id and p.P_DATE between :date_from and :date_to" \
+                      " where BUSINESS_ID=(select ID from mongodb.BUSINESSES where USER_ID=:business_id) and p.P_DATE between :date_from and :date_to" \
                       " and TRANS_TYPE in (10,11) group by status"
     transaction_json = {"title":"تراکنشها"}
 
     refund_sql = "select status,sum(amt) amt,sum(cnt) cnt from mongodb.FT_PAYMENT_TRANS_DAILY p " \
-                      " where BUSINESS_ID=:business_id and p.P_DATE between :date_from and :date_to" \
+                      " where BUSINESS_ID=(select ID from mongodb.BUSINESSES where USER_ID=:business_id) and p.P_DATE between :date_from and :date_to" \
                       " and TRANS_TYPE in (13,33,35) group by status"
     refund_json = {"title":"بازگشت وجه"}
 
     gateway_day_sql = "select gateway,p_date,status,sum(amt) amt,sum(cnt) cnt from mongodb.FT_PAYMENT_TRANS_DAILY p " \
-                      " where BUSINESS_ID=:business_id and p.P_DATE between :date_from and :date_to" \
+                      " where BUSINESS_ID=(select ID from mongodb.BUSINESSES where USER_ID=:business_id) and p.P_DATE between :date_from and :date_to" \
                       " and TRANS_TYPE in (10,11) group by gateway,p_date,status order by gateway,p_date"
     gateway_month_sql = "select gateway,substr(p_date,1,7) p_date,status,sum(amt) amt,sum(cnt) cnt from mongodb.FT_PAYMENT_TRANS_DAILY p " \
-                      " where BUSINESS_ID=:business_id and p.P_DATE between :date_from and :date_to" \
+                      " where BUSINESS_ID=(select ID from mongodb.BUSINESSES where USER_ID=:business_id) and p.P_DATE between :date_from and :date_to" \
                       " and TRANS_TYPE in (10,11) group by gateway,substr(p_date,1,7),status order by gateway,substr(p_date,1,7)"
     gateway_compare_sql = "select gateway,status,sum(amt) amt,sum(cnt) cnt from mongodb.FT_PAYMENT_TRANS_DAILY p " \
-                      " where BUSINESS_ID=:business_id and p.P_DATE between :date_from and :date_to" \
+                      " where BUSINESS_ID=(select ID from mongodb.BUSINESSES where USER_ID=:business_id) and p.P_DATE between :date_from and :date_to" \
                       " and TRANS_TYPE in (10,11) group by gateway,status order by gateway"
     gateway_json = {"title":"کل تراکنشها به تفکیک درگاه"}
 
@@ -69,7 +69,7 @@ class MerchantStatService:
             _params[k]=params[k]
         return _params
     def _get_compare_params(self,params):
-        if not all(i in params for i in ["compare_from","compare_to"]):
+        if not all(i in params and params[i] for i in ["compare_from","compare_to"]):
             return None
         compare_params=params.to_dict()
         compare_params["date_from"]=params["compare_from"]
@@ -79,8 +79,10 @@ class MerchantStatService:
     def get_transaction_stat(self,params):
         df = pd.read_sql(self.transaction_sql, self.engine, params=self._get_params(params), index_col=['status'])
         logger.debug(df)
-
         result = self.transaction_json
+        if df.empty:
+            return result
+
         result["sum_amount_succeed"] = df['amt']['S']
         result["sum_amount_unsucceed"] = df['amt']['U']
         result["sum_count_succeed"] = df['cnt']['S']
@@ -98,8 +100,10 @@ class MerchantStatService:
     def get_refund_stat(self,params):
         df = pd.read_sql(self.refund_sql, self.engine, params=self._get_params(params), index_col=['status'])
         logger.debug(df)
-
         result = self.refund_json
+        if df.empty:
+            return result
+
         result["sum_amount_succeed"] = df['amt']['S']
         result["sum_amount_unsucceed"] = df['amt']['U']
         result["sum_count_succeed"] = df['cnt']['S']
@@ -122,7 +126,7 @@ class MerchantStatService:
         result["sum_amount_unsucceed"]  = df.where(df['status']=='U')['amt'].agg("sum")
         result["sum_count_succeed"]     = df.where(df['status']=='S')['cnt'].agg("sum")
         result["sum_count_unsucceed"]   = df.where(df['status']=='U')['cnt'].agg("sum")
-        if all(df_compare):
+        if df_compare is not None and all(df_compare):
             df_compare.dropna(inplace=True)
             result["compare_count"]= df_compare["cnt"]["S"]
             result["compare_rate"] = "{:.0%}".format( result["sum_count_succeed"]/result["compare_count"] )
@@ -152,12 +156,16 @@ class MerchantStatService:
         _gateway_sql = self.gateway_month_sql if params["date_range"]=="MONTH" else self.gateway_day_sql
         df = pd.read_sql(_gateway_sql, self.engine, params=self._get_params(params), index_col=['status'])
         logger.debug(df)
+        result = self.gateway_json
+        if df.empty:
+            return result
+
+
         df_compare=None
         compare_params = self._get_compare_params(params)
         if compare_params:
             df_compare = pd.read_sql(self.gateway_compare_sql, self.engine, params=compare_params, index_col=['status'])
 
-        result = self.gateway_json
         result["sum_amount"]= df["amt"].agg("sum")
         result["sum_count"]= df["cnt"].agg("sum")
         if compare_params:
@@ -168,7 +176,7 @@ class MerchantStatService:
         for _gateway_name in df['gateway'].unique():
             result["items"].append( self._get_gateway_specific(_gateway_name
                                             ,df.where(df["gateway"]==_gateway_name)
-                                            ,df_compare.where(df_compare["gateway"]==_gateway_name)) )
+                                            ,df_compare.where(df_compare["gateway"]==_gateway_name) if compare_params else None  ) )
 
         logger.debug("get_gateway_stat=",result)
         return result
@@ -215,7 +223,7 @@ api.add_resource(MerchantStatApi,'/merchant')
 def homepage():
     return "<h1>Welcome to DP Merchant Stat APIs</h1>" \
            "<form action='merchant'>" \
-           "<input name='business_id'   value='1'/><br/>" \
+           "<input name='business_id'   value='eec4d9b0-e5cb-4712-a896-a458f432c8d1'/><br/>" \
            "<input name='date_from'     value='1401/05/01'/><br/>" \
            "<input name='date_to'       value='1401/05/31'/><br/>" \
            "<select name='date_range'>" \
@@ -229,6 +237,6 @@ def homepage():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=8001)
 
 
