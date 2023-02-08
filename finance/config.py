@@ -5,7 +5,7 @@
 __author__ = "Adel Ramezani <adramazany@gmail.com>"
 
 db_props_orcl_172= {
-    "url":"jdbc:oracle:thin:@172.18.24.84:1521/ORCL"
+    "url":"n"
     ,"user":"mongodb"
     ,"password":"Mongo123"
     ,"driver":"oracle.jdbc.OracleDriver"

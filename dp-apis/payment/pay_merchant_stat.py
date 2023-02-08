@@ -22,7 +22,8 @@ from sqlalchemy import create_engine
 app = Flask(__name__)
 api = Api(app)
 CORS(app)
-db_url = 'oracle+cx_oracle://payment_api:payment_api@10.198.31.51:1521/?service_name=dgporclw'
+#db_url = 'oracle+cx_oracle://payment_api:payment_api@10.198.31.51:1521/?service_name=dgporclw'
+db_url = 'oracle+cx_oracle://payment_api:payment_api@172.18.24.84:1521/?service_name=ORCL'
 
 ############# logging initiate ##################
 _format = '%(asctime)s - %(process)d - %(name)s - %(levelname)s - %(message)s'
@@ -219,22 +220,40 @@ app.json_encoder = FlaskJSONEncoder # to resolve : {TypeError}Object of type int
 ##########
 
 api.add_resource(MerchantStatApi,'/merchant')
+
+home_page="<h1>Welcome to DP Merchant Stat APIs</h1>" \
+          "<form action='merchant'>" \
+          "business_id:<input name='business_id'   value='eec4d9b0-e5cb-4712-a896-a458f432c8d1'/><br/>" \
+          "date_from:<input name='date_from'     value='1401/05/01'/><br/>" \
+          "date_to:<input name='date_to'       value='1401/05/31'/><br/>" \
+          "date_range:<select name='date_range'>" \
+          "<option selected>DAY</option>" \
+          "<option >MONTH</option>" \
+          "</select><br/>" \
+          "compare_from:<input name='compare_from'  value='1401/04/01'/><br/>" \
+          "compare_to:<input name='compare_to'    value='1401/04/31'/><br/>" \
+          "<input type='submit' value='run'/>" \
+          "</form>"
+
+
 @app.route('/')
 def homepage():
-    return "<h1>Welcome to DP Merchant Stat APIs</h1>" \
-           "<form action='merchant'>" \
-           "<input name='business_id'   value='eec4d9b0-e5cb-4712-a896-a458f432c8d1'/><br/>" \
-           "<input name='date_from'     value='1401/05/01'/><br/>" \
-           "<input name='date_to'       value='1401/05/31'/><br/>" \
-           "<select name='date_range'>" \
-           "<option selected>DAY</option>" \
-           "<option >MONTH</option>" \
-           "</select><br/>" \
-           "<input name='compare_from'  value='1401/04/01'/><br/>" \
-           "<input name='compare_to'    value='1401/04/31'/><br/>" \
-           "<input type='submit' value='do'/>" \
-           "</form>"
+    return home_page
 
+def gunicorn_app(environ, start_response):
+    """Simplest possible application object"""
+    data = bytes(home_page,'utf-8')
+    status = '200 OK'
+    response_headers = [
+        ('Content-type', 'text/html'),
+        ('Content-Length', str(len(data)))
+    ]
+    start_response(status, response_headers)
+    return iter([data])
+
+# run :
+# pip install gunicorn
+# gunicorn --bind "0.0.0.0:8001" --access-logfile "pay_merchant_access.log"  --error-logfile "pay_merchant_error.log" --workers 1 --worker-class gthread --threads 20 --timeout 60 --keep-alive 2 --limit-request-line 0 --limit-request-field_size 0 "pay_merchant_stat:gunicorn_app"
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8001)

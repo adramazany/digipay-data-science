@@ -13,8 +13,8 @@ etl_scheduler_interval_minutes=10      # 0 means disable scheduler
 hive_metastore_uris=None
 
 ### using apache spark storage
-spark_sql_table_prefix="parquet."
-# spark_sql_table_prefix=""
+# spark_sql_table_prefix="parquet."
+spark_sql_table_prefix=""
 
 ### using hive storage,
 # spark_sql_warehouse_dir="./spark-warehouse"
@@ -68,7 +68,7 @@ derby_props= {
     ,"driver":"org.apache.derby.jdbc.EmbeddedDriver"
 }
 
-
+db_probs = orcl_10_props
 
 # db_properties['url']="oracle+cx_oracle://mongodb:Mongo123@172.18.24.84:1521/?service_name=ORCL"
 oracle_client_path='d:/app/oracle_instantclient_19_10'

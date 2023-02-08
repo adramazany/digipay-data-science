@@ -109,9 +109,6 @@ for i in range(delta.days+1):
 
 
 
-
-
-
 # data.setValue('090001',(jdatetime.date.today().__add__(jdatetime.timedelta(days=-60))))
 # data.setValue('090001',startdate)
 # data.setValue('090002',startdate+jdatetime.timedelta(days=1))
@@ -144,3 +141,5 @@ for i in range(delta.days+1):
 # 2021-12-26 19:28:26,832 - 19896 - __main__ - INFO - fetchmany 12 chunk of:1000 records
 # 2021-12-26 19:28:53,593 - 19896 - __main__ - INFO - fetchmany 13 chunk of:1000 records
 # 2021-12-26 19:29:21,957 - 19896 - __main__ - INFO - fetchmany 14 chunk of:1000 records
+
+

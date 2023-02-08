@@ -47,4 +47,3 @@ for i in range(delta.days+1):
         if (1,1) in _groupby:
             print('GROUPBY=>',jdate_str,_groupby[1][1])
 
-

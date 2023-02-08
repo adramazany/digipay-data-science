@@ -144,3 +144,11 @@ select * from swc_steps_final;
 select * from swc_default_steps;
 
 
+select * from pc_payments;
+select count(*) from pc_payments;
+-- 25,326,914
+
+
+
+
+

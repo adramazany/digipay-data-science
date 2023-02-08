@@ -63,7 +63,7 @@ def clean_column_name(col,cleans_columns):
     if len(col)>31:
         col = str_abbreviation_first_word(col,31)
     # return col.upper()
-    clean_name = col.upper().replace("OPTION","OPTION_")
+    clean_name = col.upper().replace("OPTION","OPTION_").replace("ORDER","ORDER_")
 
     clean_name = check_clean_name_exist_iter_name(clean_name,cleans_columns)
 
@@ -501,7 +501,8 @@ def _etl_incremental(mongoDB,mongo_collection
         if fn_cnv_max_value and callable(fn_cnv_max_value):
             max_value=fn_cnv_max_value(max_value)
 
-        mongo_query={mongo_ordered_column:{"$gt":max_value}}
+        # mongo_query={mongo_ordered_column:{"$gt":max_value}}
+        mongo_query= {mongo_ordered_column:{"$gt":max_value}} if result[0] else {}
         print("etl_incremental: query=%s => max_value=%s, mongo_query=%s"%(query, max_value,mongo_query))
 
         counter = etl_append(mongoDB,mongo_collection,mongo_query,oracleDB,dest_table_name,chunk_size,mongo_ordered_column,dest_column_type,fn_clean_data,timestamp2jalali,timestamp2gregorian,subtables)
@@ -532,7 +533,10 @@ def etl_incremental(mongo_uri,mongo_db,mongo_collection
     print("transfering data from mongodb[%s,%s,%s] to oracle[%s] starting at :%s "%(mongo_db,mongo_collection,chunk_size,dest_table_name,time.gmtime()))
 
     if init_oracle_client_path :
-        cx_Oracle.init_oracle_client(init_oracle_client_path)
+        try:
+            cx_Oracle.init_oracle_client(init_oracle_client_path)
+        except Exception as ex:
+            print(ex)
 
     t1= time.time()
 

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ScalaSbtSettings">
+    <option name="linkedExternalProjectsSettings">
+      <SbtProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/dp-marketing" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/dp-marketing" />
+            <option value="$PROJECT_DIR$/dp-marketing/project" />
+          </set>
+        </option>
+        <option name="sbtVersion" value="1.4.9" />
+      </SbtProjectSettings>
+      <SbtProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/dp-superset-access-control" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/dp-superset-access-control" />
+            <option value="$PROJECT_DIR$/dp-superset-access-control/project" />
+          </set>
+        </option>
+        <option name="sbtVersion" value="1.4.9" />
+      </SbtProjectSettings>
+      <SbtProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/py-marketing" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/py-marketing" />
+            <option value="$PROJECT_DIR$/py-marketing/project" />
+          </set>
+        </option>
+        <option name="sbtVersion" value="1.4.9" />
+      </SbtProjectSettings>
+    </option>
+  </component>
+</project>

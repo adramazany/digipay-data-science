@@ -2,10 +2,25 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/InsureTech/InsureTech.iml" filepath="$PROJECT_DIR$/InsureTech/InsureTech.iml" />
+      <module fileurl="file://$PROJECT_DIR$/at-glance/at-glance.iml" filepath="$PROJECT_DIR$/at-glance/at-glance.iml" />
+      <module fileurl="file://$PROJECT_DIR$/c2c-bet-fraud/c2c-bet-fraud.iml" filepath="$PROJECT_DIR$/c2c-bet-fraud/c2c-bet-fraud.iml" />
       <module fileurl="file://$PROJECT_DIR$/data-utilities/data-utilities.iml" filepath="$PROJECT_DIR$/data-utilities/data-utilities.iml" />
+      <module fileurl="file://$PROJECT_DIR$/at-glance/dp-airflow-dag.iml" filepath="$PROJECT_DIR$/at-glance/dp-airflow-dag.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dp-airflow-dags/dp-airflow-dags.iml" filepath="$PROJECT_DIR$/dp-airflow-dags/dp-airflow-dags.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dp-apis/dp-apis.iml" filepath="$PROJECT_DIR$/dp-apis/dp-apis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dp-crawler/dp-crawler.iml" filepath="$PROJECT_DIR$/dp-crawler/dp-crawler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dp-funnel/dp-funnel.iml" filepath="$PROJECT_DIR$/dp-funnel/dp-funnel.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dp-marketing/dp-marketing.iml" filepath="$PROJECT_DIR$/dp-marketing/dp-marketing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dp-marketing/.idea/modules/dp-marketing-build.iml" filepath="$PROJECT_DIR$/dp-marketing/.idea/modules/dp-marketing-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dp-superset-access-control/dp-superset-access-control.iml" filepath="$PROJECT_DIR$/dp-superset-access-control/dp-superset-access-control.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dp-superset-access-control/.idea/modules/dp-superset-access-control-build.iml" filepath="$PROJECT_DIR$/dp-superset-access-control/.idea/modules/dp-superset-access-control-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/finance/finance.iml" filepath="$PROJECT_DIR$/finance/finance.iml" />
       <module fileurl="file://$PROJECT_DIR$/ml-py/ml-py.iml" filepath="$PROJECT_DIR$/ml-py/ml-py.iml" />
       <module fileurl="file://$PROJECT_DIR$/mongodb-data-evaluation/mongodb-data-evaluation.iml" filepath="$PROJECT_DIR$/mongodb-data-evaluation/mongodb-data-evaluation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/monitoring/monitoring.iml" filepath="$PROJECT_DIR$/monitoring/monitoring.iml" />
       <module fileurl="file://$PROJECT_DIR$/py-face.iml" filepath="$PROJECT_DIR$/py-face.iml" />
+      <module fileurl="file://$PROJECT_DIR$/py-marketing/.idea/modules/py-marketing.iml" filepath="$PROJECT_DIR$/py-marketing/.idea/modules/py-marketing.iml" />
       <module fileurl="file://$PROJECT_DIR$/py-mongo-data-eval/py-mongo-data-eval.iml" filepath="$PROJECT_DIR$/py-mongo-data-eval/py-mongo-data-eval.iml" />
       <module fileurl="file://$PROJECT_DIR$/tutorial_pkg/tutorial_pkg.iml" filepath="$PROJECT_DIR$/tutorial_pkg/tutorial_pkg.iml" />
     </modules>

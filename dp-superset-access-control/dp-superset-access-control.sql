@@ -2,6 +2,7 @@
 create role dp_common_role;
 create role dp_user_role;
 create role dp_credit_c_role;
+create role dp_credit_funnel_role;
 create role dp_credit_bnpl_role;
 create role dp_credit_card_role;
 create role dp_credit_merchant_role;

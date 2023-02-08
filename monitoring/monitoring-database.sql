@@ -106,8 +106,8 @@ from dual;
 create or replace view vw_health_weekly as
 select tt.*,amount-prev_amount dif_amount,count-prev_count dif_count
 from(select to_char(pdate) pdate,last_time,at.BL,to_char(F_TYPE) f_type,at.Description type,at.p_Description ptype
-          ,amount,LAG(amount) OVER (partition by f_type ORDER BY pdate) prev_amount
-          ,count,LAG(count) OVER (partition by f_type ORDER BY pdate) prev_count
+          ,NVL(amount,0) amount,NVL(LAG(amount) OVER (partition by f_type ORDER BY pdate),0) prev_amount
+          ,NVL(count,0) count,NVL(LAG(count) OVER (partition by f_type ORDER BY pdate),0) prev_count
      from (
 select to_char(trunc(sysdate-5, 'iw')+5,'YYYYMMDD','nls_calendar=persian') pdate,a.F_TYPE
     ,sum(MINUTE_AMOUNT) amount,sum(MINUTE_COUNT) count
@@ -134,8 +134,8 @@ select * from vw_health_weekly;
 create or replace view vw_health_monthly as
 select tt.*,amount-prev_amount dif_amount,count-prev_count dif_count
 from(select to_char(pdate) pdate,last_time,at.BL,to_char(F_TYPE) f_type,at.Description type,at.p_Description ptype
-          ,amount,LAG(amount) OVER (partition by f_type ORDER BY pdate) prev_amount
-          ,count,LAG(count) OVER (partition by f_type ORDER BY pdate) prev_count
+          ,NVL(amount,0) amount,NVL(LAG(amount) OVER (partition by f_type ORDER BY pdate),0) prev_amount
+          ,NVL(count,0) count,NVL(LAG(count) OVER (partition by f_type ORDER BY pdate),0) prev_count
      from (
               select to_char(sysdate, 'YYYYMM','nls_calendar=persian')||'01' pdate,a.F_TYPE
                    ,sum(MINUTE_AMOUNT) amount,sum(MINUTE_COUNT) count
@@ -163,8 +163,8 @@ select * from vw_health_monthly;
 create or replace view vw_health_daily as
 select tt.*,amount-prev_amount dif_amount,count-prev_count dif_count
 from(select to_char(pdate) pdate,lpad(floor(last_time/100),2,'0')||':'||lpad(mod(last_time,100),2,'0') as last_time,at.BL,to_char(F_TYPE) f_type,at.Description type,at.p_Description ptype
-          ,amount,LAG(amount) OVER (partition by f_type ORDER BY pdate) prev_amount
-          ,count,LAG(count) OVER (partition by f_type ORDER BY pdate) prev_count
+          ,NVL(amount,0) amount,NVL(LAG(amount) OVER (partition by f_type ORDER BY pdate),0) prev_amount
+          ,NVL(count,0) count,NVL(LAG(count) OVER (partition by f_type ORDER BY pdate),0) prev_count
      from (select a.pdate,a.F_TYPE,sum(MINUTE_AMOUNT) amount,sum(MINUTE_COUNT) count,max(a.HOUR_MINUTE) last_time
            from CDC_ACTIVITIES_10MIN_AGG_OK a
            where a.HOUR_MINUTE<=to_char(sysdate,'HH24MI')
@@ -211,3 +211,21 @@ where a.pdate||lpad(a.HOUR_MINUTE,4,'0')
 and a.F_TYPE=13 and a.PDATE='14010302'
 order by a.pdate ||' '|| lpad(floor(a.HOUR_MINUTE/100),2,'0')||':'||lpad(mod(a.HOUR_MINUTE,100),2,0) desc
 ;
+
+
+
+
+select tt.*,amount-prev_amount dif_amount,count-prev_count dif_count
+from(select to_char(pdate) pdate,lpad(floor(last_time/100),2,'0')||':'||lpad(mod(last_time,100),2,'0') as last_time,at.BL,to_char(F_TYPE) f_type,at.Description type,at.p_Description ptype
+          ,amount,nvl(LAG(amount) OVER (partition by f_type ORDER BY pdate),0) prev_amount
+          ,count,nvl(LAG(count) OVER (partition by f_type ORDER BY pdate),0) prev_count
+     from (select a.pdate,a.F_TYPE,sum(MINUTE_AMOUNT) amount,sum(MINUTE_COUNT) count,max(a.HOUR_MINUTE) last_time
+           from CDC_ACTIVITIES_10MIN_AGG_OK a
+           where a.HOUR_MINUTE<=to_char(sysdate,'HH24MI')
+             and a.PDATE>=to_char(sysdate-1,'YYYYMMDD','nls_calendar=persian')
+           group by a.pdate,a.F_TYPE)t
+              left join ACTIVITY_TYPE_BL at on at.id=t.F_TYPE
+    )tt where PDATE=''||to_char(sysdate,'YYYYMMDD','nls_calendar=persian')
+;
+
+

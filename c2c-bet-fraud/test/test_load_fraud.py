@@ -26,3 +26,7 @@ class TestFraudRealData(TestCase):
     def test_etl_eghtedadnovin140009(self):
         FraudRealData().etl('eghtedadnovin',140009,config.c2cbet_src_path+"140009-eghtedadnovin.xlsx")
         # 146
+
+    def test_etl_digipay_10_12(self):
+        FraudRealData().etl('digipay',140010,config.c2cbet_src_path+"14010204-digipay.xlsx")
+        # 2,422

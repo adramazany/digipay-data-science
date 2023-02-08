@@ -123,6 +123,14 @@ def etl_rahkaran_monthly_moein_report(year,month):
     print(f"sql_update_agg={sql_update_agg}")
     dst_engine.execute(sql_update_agg)
 
+    sql_ins_at_glance="INSERT INTO DP_AT_A_GLANCE.STG_AT_GLANCE " \
+                      " select GDATE,PDATE,KPI,KPI_DETAILS,MEASURE" \
+                      " from FINANCE.vw_fin_at_glance d" \
+                      " where not exists(select * from DP_AT_A_GLANCE.STG_AT_GLANCE sg" \
+                      " where sg.kpi=d.kpi and sg.PDATE=d.pdate)"
+    print(f"sql_ins_at_glance={sql_ins_at_glance}")
+    dst_engine.execute(sql_ins_at_glance)
+
 def etl_rahkaran_basetables():
     _src_db_host=src_db_host
     _src_db_port=src_db_port
@@ -214,3 +222,4 @@ if __name__ == "__main__":
 
     # etl_rahkaran_monthly_moein_report(1401,1)
     # etl_rahkaran_basetables()
+

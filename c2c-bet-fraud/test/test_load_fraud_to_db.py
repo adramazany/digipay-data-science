@@ -55,8 +55,9 @@ if __name__=="__main__" :
             ,{"provider":'eghtedadnovin',"yearmonth":140009,"filePath":config.c2cbet_src_path+"140009-eghtedadnovin.xlsx"}]
     # f2db = FraudRealData2DB(db_props=config.derby_props)
     f2db = FraudRealData2DB(db_props=config.orcl_10_props)
-    for f in inputs :
-        f2db.etl(f["provider"],f["yearmonth"],f["filePath"])
+    # for f in inputs :
+    #     f2db.etl(f["provider"],f["yearmonth"],f["filePath"])
     # f.etl('sadad',140008,config.c2cbet_src_path+"140008-sadad.xlsx")
     # f.etl('sadad',140009,config.c2cbet_src_path+"140009-sadad.xlsx")
     # f.etl('eghtedadnovin',140009,config.c2cbet_src_path+"140009-eghtedadnovin.xlsx")
+    f2db.etl('digipay',140010,config.c2cbet_src_path+"14010204-digipay.xlsx")

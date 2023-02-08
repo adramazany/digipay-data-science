@@ -1,20 +1,8 @@
 import cx_Oracle
-
-user = "mongodb"
-pw = "Mongo123"
-# dsn = "172.18.24.84/orclpdb1"
-dsn = "172.18.24.84/orcl"
-
-# DPI-1047: Cannot locate a 64-bit Oracle Client library: "dlopen(libclntsh.dylib, 1): image not found"
-cx_Oracle.init_oracle_client("/Users/adel/ds/oracle_instantclient_19_8")
-con = cx_Oracle.connect(user, pw, dsn)
-print("Database version:", con.version)
-
-cursor=con.cursor()
-cursor.execute("select * from psp")
-records=cursor.fetchall();
-for r in records :
-    print (r)
-
-cursor.close()
-con.close()
+import pandas as pd
+from sqlalchemy import create_engine
+# db_url = 'oracle+cx_oracle://mongodb:Mongo123@10.198.31.51:1521/?service_name=dgporclw'
+db_url = 'oracle+cx_oracle://mongodb:Mongo123@172.18.24.84:1521/?service_name=orcl'
+engine = create_engine(db_url)
+df = pd.read_sql("select * from bank", engine)
+print(df)

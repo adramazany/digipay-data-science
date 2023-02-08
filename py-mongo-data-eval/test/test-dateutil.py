@@ -1,8 +1,7 @@
-from datetime import datetime
+from datetime import datetime, date
 
 import jdatetime
 from digipay import dateutil
-
 print("############ from string ################")
 print("from string=",datetime.strptime("12/1/2010 8:26","%d/%m/%Y %H:%M"))
 print("############ now ################")
@@ -27,6 +26,7 @@ print("prev_month_jalali_6m=",dateutil.prev_month_jalali(date_jalali,6))
 print("prev_month_jalali_12m=",dateutil.prev_month_jalali(date_jalali,12))
 print("prev_month_jalali_12m=",dateutil.prev_month_jalali(date_jalali,24))
 
+pytz.tzinfo()
 print("############ month-end ################")
 date_jalali=jdatetime.datetime(1399,1,31)
 print("date_jalali=",date_jalali)
